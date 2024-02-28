@@ -1,6 +1,5 @@
 package com.example.stocksapp.presentation
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.stocksapp.data.RepositoryImpl
@@ -20,10 +19,12 @@ class TerminalViewModel: ViewModel() {
     val state = _state.asStateFlow()
     private var lastState: TerminalScreenState = TerminalScreenState.Initial
 
-    private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
+    private val _error = MutableStateFlow(false)
+    val error = _error.asStateFlow()
+
+    private val exceptionHandler = CoroutineExceptionHandler { _, _ ->
         _state.value = lastState
-        Log.d("ERROR", "error in TerminalVM: $throwable")
-        //Todo add toast or SnackBar
+        _error.value = true
     }
 
 

@@ -1,5 +1,6 @@
 package com.example.stocksapp.presentation
 
+import android.widget.Toast
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.rememberTransformableState
@@ -28,6 +29,7 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.TextMeasurer
@@ -52,6 +54,7 @@ fun Terminal(
 ) {
     val viewModel: TerminalViewModel = viewModel()
     val screenState = viewModel.state.collectAsState()
+    val errorState = viewModel.error.collectAsState()
 
     when (val currentState = screenState.value) {
         is TerminalScreenState.Content -> {
@@ -97,6 +100,11 @@ fun Terminal(
             }
         }
     }
+
+    if (errorState.value) {
+        Toast.makeText(LocalContext.current.applicationContext, "wait 1 minute for next request", Toast.LENGTH_LONG).show()
+    }
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
